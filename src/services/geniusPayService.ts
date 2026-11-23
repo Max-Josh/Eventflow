@@ -1,5 +1,15 @@
+export interface MerchantNumbers {
+  merchantName: string;
+  waveNumber: string;
+  orangeMoneyNumber: string;
+  mtnMoMoNumber: string;
+  moovMoneyNumber: string;
+  instructions?: string;
+}
+
 export interface GeniusPayConfig {
   environment: 'sandbox' | 'live';
+  paymentMode: 'gateway' | 'direct_numbers' | 'hybrid'; // gateway = push auto, direct_numbers = transfert manuel, hybrid = les 2
   publicKey: string;
   secretKey: string;
   webhookSecret: string;
@@ -12,12 +22,14 @@ export interface GeniusPayConfig {
     moovMoney: boolean;
     cards: boolean;
   };
+  merchantNumbers: MerchantNumbers;
 }
 
 const STORAGE_KEY = 'eventflow_geniuspay_config';
 
 const DEFAULT_CONFIG: GeniusPayConfig = {
   environment: 'sandbox',
+  paymentMode: 'hybrid',
   publicKey: (import.meta as any).env?.VITE_GENIUSPAY_PUBLIC_KEY || '',
   secretKey: (import.meta as any).env?.VITE_GENIUSPAY_SECRET_KEY || '',
   webhookSecret: (import.meta as any).env?.VITE_GENIUSPAY_WEBHOOK_SECRET || '',
@@ -30,6 +42,14 @@ const DEFAULT_CONFIG: GeniusPayConfig = {
     moovMoney: true,
     cards: true,
   },
+  merchantNumbers: {
+    merchantName: 'EVENTFLOW CI SAS',
+    waveNumber: '+225 07 00 12 34 56',
+    orangeMoneyNumber: '+225 07 89 01 23 45',
+    mtnMoMoNumber: '+225 05 67 89 01 23',
+    moovMoneyNumber: '+225 01 23 45 67 89',
+    instructions: 'Mentionnez votre nom ou la référence de la commande lors du transfert.',
+  },
 };
 
 /**
@@ -40,7 +60,12 @@ export function getGeniusPayConfig(): GeniusPayConfig {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      return { ...DEFAULT_CONFIG, ...parsed };
+      return { 
+        ...DEFAULT_CONFIG, 
+        ...parsed,
+        channels: { ...DEFAULT_CONFIG.channels, ...(parsed.channels || {}) },
+        merchantNumbers: { ...DEFAULT_CONFIG.merchantNumbers, ...(parsed.merchantNumbers || {}) }
+      };
     }
   } catch (err) {
     console.error('Erreur lecture config GeniusPay:', err);

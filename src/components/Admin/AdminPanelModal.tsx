@@ -11,8 +11,11 @@ import {
   Copy, 
   RefreshCw,
   AlertTriangle,
-  Server
+  Server,
+  PhoneCall,
+  Building
 } from 'lucide-react';
+import { getGeniusPayConfig } from '../../services/geniusPayService';
 
 interface AdminPanelModalProps {
   onClose: () => void;
@@ -26,6 +29,15 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
   onOpenSupabaseConfig,
 }) => {
   const [activeTab, setActiveTab] = useState<'geniuspay' | 'database' | 'security'>('geniuspay');
+  const geniusConfig = getGeniusPayConfig();
+
+  const getModeLabel = (mode: string) => {
+    switch (mode) {
+      case 'gateway': return '⚡ Débit Push Automatique (GeniusPay)';
+      case 'direct_numbers': return '📱 Transfert sur Numéros Marchands';
+      default: return '🔀 Hybride (Push Auto + Numéros Marchands)';
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md overflow-y-auto font-sans">
@@ -70,7 +82,7 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
             }`}
           >
             <Zap className="w-4 h-4" />
-            <span>Paramétrage GeniusPay</span>
+            <span>Paramétrage GeniusPay & Numéros</span>
           </button>
 
           <button
@@ -105,11 +117,11 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
               <div className="p-4 rounded-xl bg-black/40 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h4 className="text-sm font-display font-bold text-white flex items-center gap-2">
-                    <span>Passerelle Marchande GeniusPay API v2.1</span>
+                    <span>Passerelle Marchande & Numéros de Réception</span>
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   </h4>
                   <p className="text-xs text-slate-400 mt-1">
-                    Gestion centralisée des encaissements Wave, Orange Money, MTN MoMo et cartes bancaires.
+                    Gestion des clés GeniusPay et des numéros Wave, Orange Money, MTN et Moov de la plateforme.
                   </p>
                 </div>
                 <button
@@ -119,32 +131,65 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                   }}
                   className="px-4 py-2 rounded-xl text-xs font-display font-bold text-white bg-[#FF5500] hover:bg-[#E04B00] transition-colors cursor-pointer whitespace-nowrap shadow-sm"
                 >
-                  Ouvrir l'Éditeur de Clés API
+                  Configurer les Clés & Numéros
                 </button>
               </div>
 
+              {/* Mode & Environment Card */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                 <div className="p-3.5 rounded-xl bg-[#0B0D11] border border-white/5 space-y-1">
-                  <span className="text-[10px] font-mono text-slate-500 uppercase">Environnement</span>
-                  <div className="font-bold text-emerald-400">Production (Live)</div>
-                  <span className="text-[10px] text-slate-400 block">Vrais débits bancaires</span>
+                  <span className="text-[10px] font-mono text-slate-500 uppercase">Mode de Paiement Actif</span>
+                  <div className="font-bold text-[#FF5500] text-[11px] truncate">{getModeLabel(geniusConfig.paymentMode)}</div>
+                  <span className="text-[10px] text-slate-400 block">Présenté aux participants</span>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#0B0D11] border border-white/5 space-y-1">
-                  <span className="text-[10px] font-mono text-slate-500 uppercase">Commission Plateforme</span>
-                  <div className="font-bold text-white font-mono">2.5% par transaction</div>
-                  <span className="text-[10px] text-slate-400 block">Frais GeniusPay inclus</span>
+                  <span className="text-[10px] font-mono text-slate-500 uppercase">Environnement API</span>
+                  <div className="font-bold text-emerald-400">
+                    {geniusConfig.environment === 'live' ? '⚡ Production (Live)' : '🧪 Sandbox (Test)'}
+                  </div>
+                  <span className="text-[10px] text-slate-400 block">Passerelle GeniusPay</span>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#0B0D11] border border-white/5 space-y-1">
-                  <span className="text-[10px] font-mono text-slate-500 uppercase">Solde Séquestre Global</span>
-                  <div className="font-bold text-white font-mono">1 485 000 FCFA</div>
-                  <span className="text-[10px] text-emerald-400 block">Prêt pour virement</span>
+                  <span className="text-[10px] font-mono text-slate-500 uppercase">Titulaire Marchand</span>
+                  <div className="font-bold text-white truncate">{geniusConfig.merchantNumbers.merchantName}</div>
+                  <span className="text-[10px] text-emerald-400 block">Compte certifié</span>
+                </div>
+              </div>
+
+              {/* Configured Merchant Numbers Overview */}
+              <div className="p-4 rounded-xl bg-[#0B0D11] border border-white/5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-display font-bold text-white uppercase flex items-center gap-1.5">
+                    <PhoneCall className="w-3.5 h-3.5 text-[#FF5500]" />
+                    Numéros Récepteurs Officiels Actifs
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono">Modifiables par Super-Admin</span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                  <div className="p-2.5 rounded-lg bg-[#131720] border border-white/5">
+                    <span className="text-[10px] text-[#1DC4E9] font-bold block">Wave CI</span>
+                    <span className="font-mono text-white text-xs">{geniusConfig.merchantNumbers.waveNumber || 'Non défini'}</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[#131720] border border-white/5">
+                    <span className="text-[10px] text-[#FF7900] font-bold block">Orange Money</span>
+                    <span className="font-mono text-white text-xs">{geniusConfig.merchantNumbers.orangeMoneyNumber || 'Non défini'}</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[#131720] border border-white/5">
+                    <span className="text-[10px] text-[#FFCC00] font-bold block">MTN MoMo</span>
+                    <span className="font-mono text-white text-xs">{geniusConfig.merchantNumbers.mtnMoMoNumber || 'Non défini'}</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[#131720] border border-white/5">
+                    <span className="text-[10px] text-blue-400 font-bold block">Moov Money</span>
+                    <span className="font-mono text-white text-xs">{geniusConfig.merchantNumbers.moovMoneyNumber || 'Non défini'}</span>
+                  </div>
                 </div>
               </div>
 
               <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-start gap-2.5">
                 <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>
-                  <strong>Protection RBAC active :</strong> Les organisateurs ne peuvent ni voir ni modifier ces paramètres. Seul le compte administrateur a la maîtrise du compte marchand GeniusPay.
+                  <strong>Protection RBAC active :</strong> Les organisateurs d'événements ne peuvent ni voir ni modifier ces numéros et clés. Seul le Super-Administrateur a la pleine gouvernance.
                 </span>
               </div>
             </div>
