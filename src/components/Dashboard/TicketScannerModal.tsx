@@ -30,10 +30,6 @@ export const TicketScannerModal: React.FC<TicketScannerModalProps> = ({
     message?: string;
   }>({ status: 'idle' });
 
-  // Quick test references
-  const pendingSample = registrations.find(r => !r.checkedIn);
-  const checkedInSample = registrations.find(r => r.checkedIn);
-
   const handleVerify = (codeToTest?: string) => {
     const rawInput = (codeToTest || scannedCode).trim();
     if (!rawInput) return;
@@ -76,9 +72,9 @@ export const TicketScannerModal: React.FC<TicketScannerModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-lg bg-[#121726] border border-white/15 rounded-3xl shadow-2xl overflow-hidden my-8">
+      <div className="relative w-full max-w-lg bg-[#131720] border border-white/15 rounded-3xl shadow-2xl overflow-hidden my-8">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10 bg-[#0E1322]">
+        <div className="flex items-center justify-between p-6 border-b border-white/10 bg-[#0F1218]">
           <div className="flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
               <QrCode className="w-5 h-5 text-emerald-400" />
@@ -135,48 +131,15 @@ export const TicketScannerModal: React.FC<TicketScannerModalProps> = ({
                   onChange={(e) => setScannedCode(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
                   placeholder="Ex: EF-2026-8942 ou Jean Kouamé"
-                  className="w-full bg-[#0A0D14] border border-white/10 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-[#0A0D14] border border-white/10 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#FF5500]"
                 />
               </div>
               <button
                 onClick={() => handleVerify()}
-                className="px-5 py-2.5 rounded-xl text-xs font-display font-bold text-white bg-gradient-to-r from-indigo-500 to-rose-500 hover:from-indigo-600 hover:to-rose-600 transition-all cursor-pointer shadow-md"
+                className="px-5 py-2.5 rounded-xl text-xs font-display font-bold text-white bg-[#FF5500] hover:bg-[#E04B00] transition-all cursor-pointer shadow-md"
               >
-                Valider
+                Vérifier
               </button>
-            </div>
-          </div>
-
-          {/* Quick Test Shortcuts */}
-          <div className="p-3.5 rounded-2xl bg-[#0A0D14] border border-white/10 space-y-2">
-            <span className="text-[10px] font-display font-bold text-slate-400 uppercase tracking-wider block">
-              Tests rapides en direct :
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {pendingSample && (
-                <button
-                  onClick={() => {
-                    setScannedCode(pendingSample.referenceNumber);
-                    handleVerify(pendingSample.referenceNumber);
-                  }}
-                  className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-display flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Tester billet valide ({pendingSample.referenceNumber})</span>
-                </button>
-              )}
-              {checkedInSample && (
-                <button
-                  onClick={() => {
-                    setScannedCode(checkedInSample.referenceNumber);
-                    handleVerify(checkedInSample.referenceNumber);
-                  }}
-                  className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-display flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <AlertTriangle className="w-3.5 h-3.5" />
-                  <span>Tester doublon ({checkedInSample.referenceNumber})</span>
-                </button>
-              )}
             </div>
           </div>
 

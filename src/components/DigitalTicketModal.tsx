@@ -47,7 +47,7 @@ export const DigitalTicketModal: React.FC<DigitalTicketModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-md bg-[#121726] border border-white/15 rounded-3xl shadow-2xl overflow-hidden my-8">
+      <div className="relative w-full max-w-md bg-[#131720] border border-white/15 rounded-3xl shadow-2xl overflow-hidden my-8">
         {/* Close button */}
         <div className="absolute top-4 right-4 z-10">
           <button
@@ -63,12 +63,8 @@ export const DigitalTicketModal: React.FC<DigitalTicketModalProps> = ({
           {/* Header Brand */}
           <div className="flex items-center justify-between pb-4 border-b border-white/10">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-500 to-rose-500 flex items-center justify-center shadow-md shadow-indigo-500/30">
-                <svg className="w-4 h-4 text-white" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round">
-                  <circle cx="32" cy="32" r="18" />
-                  <ellipse cx="32" cy="32" rx="7.5" ry="18" />
-                  <path d="M14 32h36" />
-                </svg>
+              <div className="w-8 h-8 rounded-xl bg-[#FF5500] flex items-center justify-center shadow-md font-display font-black text-white text-xs">
+                EF
               </div>
               <span className="font-display font-extrabold text-sm tracking-tight text-white">
                 EVENTFLOW CI
@@ -81,9 +77,9 @@ export const DigitalTicketModal: React.FC<DigitalTicketModalProps> = ({
           </div>
 
           {/* Ticket Card Visual with sleek dark luxury styling */}
-          <div className="mt-4 bg-gradient-to-br from-[#182033] via-[#101524] to-[#0A0D14] rounded-3xl border border-indigo-500/30 p-6 shadow-inner relative overflow-hidden">
+          <div className="mt-4 bg-[#0B0D11] rounded-3xl border border-[#FF5500]/30 p-6 shadow-inner relative overflow-hidden">
             {/* Event Title */}
-            <div className="text-[11px] font-display font-bold text-indigo-400 uppercase tracking-wider mb-1">
+            <div className="text-[11px] font-mono font-bold text-[#FF5500] uppercase tracking-wider mb-1">
               {event.category.toUpperCase()}
             </div>
             <h2 className="text-base sm:text-lg font-display font-extrabold text-white leading-snug">
@@ -93,11 +89,11 @@ export const DigitalTicketModal: React.FC<DigitalTicketModalProps> = ({
             {/* Date & Location */}
             <div className="mt-4 space-y-1.5 text-xs text-slate-300 font-display">
               <div className="flex items-center gap-2">
-                <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                <Calendar className="w-3.5 h-3.5 text-[#FF5500]" />
                 <span>{formatFrenchDate(event.startDate)}</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-rose-400" />
+                <MapPin className="w-3.5 h-3.5 text-slate-400" />
                 <span className="truncate">{event.city} • {event.address}</span>
               </div>
             </div>
@@ -105,8 +101,8 @@ export const DigitalTicketModal: React.FC<DigitalTicketModalProps> = ({
             {/* Dashed separation line with ticket cutouts */}
             <div className="relative my-6">
               <div className="border-t-2 border-dashed border-white/10" />
-              <div className="absolute -left-9 -top-3 w-6 h-6 rounded-full bg-[#121726]" />
-              <div className="absolute -right-9 -top-3 w-6 h-6 rounded-full bg-[#121726]" />
+              <div className="absolute -left-9 -top-3 w-6 h-6 rounded-full bg-[#131720]" />
+              <div className="absolute -right-9 -top-3 w-6 h-6 rounded-full bg-[#131720]" />
             </div>
 
             {/* QR Code Section with Anti-Fraud Hologram */}
@@ -129,7 +125,7 @@ export const DigitalTicketModal: React.FC<DigitalTicketModalProps> = ({
                 <span className="text-[10px] font-display font-bold uppercase tracking-widest text-slate-400 block">
                   Numéro de référence
                 </span>
-                <span className="font-mono text-sm font-bold text-indigo-300">
+                <span className="font-mono text-sm font-bold text-[#FF5500]">
                   {registration.referenceNumber}
                 </span>
               </div>

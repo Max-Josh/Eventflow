@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { MarqueeBanner } from './components/MarqueeBanner';
@@ -23,9 +23,53 @@ import { INITIAL_EVENTS, INITIAL_REGISTRATIONS } from './data/mockData';
 import { EventItem, Registration, UserRole } from './types';
 
 export function App() {
-  // Global Data State
-  const [events, setEvents] = useState<EventItem[]>(INITIAL_EVENTS);
-  const [registrations, setRegistrations] = useState<Registration[]>(INITIAL_REGISTRATIONS);
+  // Global Data State with persistent cache
+  const [events, setEvents] = useState<EventItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('eventflow_events');
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return INITIAL_EVENTS;
+  });
+
+  const [registrations, setRegistrations] = useState<Registration[]>(() => {
+    try {
+      const saved = localStorage.getItem('eventflow_registrations');
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return INITIAL_REGISTRATIONS;
+  });
+
+  // Sync to local storage
+  useEffect(() => {
+    try {
+      localStorage.setItem('eventflow_events', JSON.stringify(events));
+    } catch {
+      // ignore
+    }
+  }, [events]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('eventflow_registrations', JSON.stringify(registrations));
+    } catch {
+      // ignore
+    }
+  }, [registrations]);
+
+  // Purge test registrations
+  const handlePurgeRegistrations = () => {
+    setRegistrations([]);
+    try {
+      localStorage.removeItem('eventflow_registrations');
+    } catch {
+      // ignore
+    }
+  };
 
   // Navigation & View States
   const [currentView, setCurrentView] = useState<'catalog' | 'dashboard' | 'scanner'>('catalog');
@@ -122,7 +166,6 @@ export function App() {
               }}
               onCreateClick={() => setIsCreateModalOpen(true)}
               onScannerClick={() => setIsScannerModalOpen(true)}
-              onOpenGeniusPayConfig={() => setIsGeniusPayModalOpen(true)}
             />
 
             {/* Marquee Banner */}
@@ -193,7 +236,6 @@ export function App() {
       <Footer
         onNavigate={setCurrentView}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
-        onOpenGeniusPayModal={() => setIsGeniusPayModalOpen(true)}
       />
 
       {/* Modals */}
@@ -208,6 +250,7 @@ export function App() {
             setIsAdminModalOpen(false);
             setIsSupabaseModalOpen(true);
           }}
+          onPurgeRegistrations={handlePurgeRegistrations}
         />
       )}
 

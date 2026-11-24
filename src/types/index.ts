@@ -13,7 +13,7 @@ export type EventStatus = 'draft' | 'published' | 'closed' | 'cancelled';
 
 export type LocationType = 'in-person' | 'online' | 'hybrid';
 
-export type PaymentMethod = 'wave' | 'orange_money' | 'mtn_momo' | 'card' | 'free';
+export type PaymentMethod = 'wave' | 'orange_money' | 'mtn_momo' | 'moov_money' | 'card' | 'free';
 
 export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
 

@@ -17,14 +17,12 @@ interface HeroSectionProps {
   onExploreClick: () => void;
   onCreateClick: () => void;
   onScannerClick: () => void;
-  onOpenGeniusPayConfig?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onExploreClick,
   onCreateClick,
   onScannerClick,
-  onOpenGeniusPayConfig,
 }) => {
   const [activeTab, setActiveTab] = useState<'checkout' | 'ticket' | 'metrics'>('checkout');
 

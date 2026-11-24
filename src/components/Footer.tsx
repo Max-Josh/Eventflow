@@ -4,13 +4,11 @@ import { ShieldCheck, MapPin, Zap, Lock } from 'lucide-react';
 interface FooterProps {
   onNavigate: (view: 'catalog' | 'dashboard' | 'scanner') => void;
   onOpenCreateModal: () => void;
-  onOpenGeniusPayModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ 
   onNavigate, 
   onOpenCreateModal,
-  onOpenGeniusPayModal
 }) => {
   return (
     <footer className="border-t border-white/10 bg-[#070A0F] text-slate-400 text-xs font-display">
@@ -65,14 +63,6 @@ export const Footer: React.FC<FooterProps> = ({
                   Créer une activité
                 </button>
               </li>
-              {onOpenGeniusPayModal && (
-                <li>
-                  <button onClick={onOpenGeniusPayModal} className="text-sky-400 hover:text-sky-300 font-bold transition-colors cursor-pointer flex items-center gap-1">
-                    <Zap className="w-3 h-3" />
-                    Passerelle GeniusPay
-                  </button>
-                </li>
-              )}
             </ul>
           </div>
 

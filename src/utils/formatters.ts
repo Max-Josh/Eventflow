@@ -75,6 +75,13 @@ export function getPaymentMethodDetails(method: string) {
         badgeClass: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
         fee: '1% de frais',
       };
+    case 'moov_money':
+      return {
+        label: 'Moov Money CI',
+        color: '#0066b3',
+        badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+        fee: '1% de frais',
+      };
     case 'card':
       return {
         label: 'Carte Bancaire (Visa/Mastercard)',

@@ -44,10 +44,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
     setError(null);
     setIsLoading(true);
 
-    if (selectedRole === 'admin' && adminPin !== 'ADMIN2026' && adminPin.trim() !== '') {
-      setIsLoading(false);
-      setError('Code d’accès Administrateur incorrect. Veuillez vérifier.');
-      return;
+    if (selectedRole === 'admin') {
+      if (!adminPin || adminPin.trim() !== 'ADMIN2026') {
+        setIsLoading(false);
+        setError('Accès refusé : Le code secret Super-Admin (PIN) est requis et incorrect.');
+        return;
+      }
     }
 
     setTimeout(() => {

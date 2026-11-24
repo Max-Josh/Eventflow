@@ -64,18 +64,20 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
   const [showGeniusPayPopup, setShowGeniusPayPopup] = useState(false);
 
   // Helper to get active merchant number according to current operator
-  const getMerchantNumberForMethod = (method: PaymentMethod) => {
+  const getMerchantNumberForMethod = (method: PaymentMethod): string => {
     switch (method) {
       case 'wave':
-        return geniusConfig.merchantNumbers.waveNumber || '+225 07 00 12 34 56';
+        return geniusConfig.merchantNumbers.waveNumber || '';
       case 'orange_money':
-        return geniusConfig.merchantNumbers.orangeMoneyNumber || '+225 07 89 01 23 45';
+        return geniusConfig.merchantNumbers.orangeMoneyNumber || '';
       case 'mtn_momo':
-        return geniusConfig.merchantNumbers.mtnMoMoNumber || '+225 05 67 89 01 23';
+        return geniusConfig.merchantNumbers.mtnMoMoNumber || '';
+      case 'moov_money':
+        return geniusConfig.merchantNumbers.moovMoneyNumber || '';
       case 'card':
         return 'Portail Bancaire 3D-Secure';
       default:
-        return geniusConfig.merchantNumbers.waveNumber;
+        return '';
     }
   };
 
@@ -181,6 +183,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
       case 'wave': return 'Wave Côte d’Ivoire';
       case 'orange_money': return 'Orange Money CI';
       case 'mtn_momo': return 'MTN Mobile Money CI';
+      case 'moov_money': return 'Moov Money CI';
       case 'card': return 'Carte Bancaire (Visa/Mastercard)';
       default: return 'Gratuit';
     }
@@ -429,6 +432,24 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
 
                 <button
                   type="button"
+                  onClick={() => setPaymentMethod('moov_money')}
+                  className={`p-3 rounded-2xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
+                    paymentMethod === 'moov_money'
+                      ? 'bg-blue-500/10 border-blue-400 text-white shadow-lg shadow-blue-500/10'
+                      : 'bg-[#0A0D14] border-white/10 text-slate-400 hover:border-white/25'
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center font-display font-black text-white text-xs shadow-md">
+                    MV
+                  </div>
+                  <div>
+                    <div className="text-xs font-display font-bold text-white">Moov Money</div>
+                    <div className="text-[10px] text-blue-400 font-semibold">Validation push</div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => setPaymentMethod('card')}
                   className={`p-3 rounded-2xl border text-left flex items-center gap-2.5 transition-all cursor-pointer ${
                     paymentMethod === 'card'
@@ -454,20 +475,26 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                       <PhoneCall className="w-4 h-4 text-amber-400" />
                       Numéro Marchand {getProviderName(paymentMethod)} :
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => handleCopyNumber(getMerchantNumberForMethod(paymentMethod))}
-                      className="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-[10px] font-mono flex items-center gap-1 cursor-pointer transition-colors"
-                    >
-                      {copiedNumber ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                      <span>{copiedNumber ? 'Copié !' : 'Copier'}</span>
-                    </button>
+                    {getMerchantNumberForMethod(paymentMethod) && (
+                      <button
+                        type="button"
+                        onClick={() => handleCopyNumber(getMerchantNumberForMethod(paymentMethod))}
+                        className="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-[10px] font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        {copiedNumber ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                        <span>{copiedNumber ? 'Copié !' : 'Copier'}</span>
+                      </button>
+                    )}
                   </div>
 
                   <div className="p-2.5 rounded-lg bg-[#0A0D14] border border-white/10 flex items-center justify-between">
                     <div>
                       <div className="text-sm font-mono font-black text-white">
-                        {getMerchantNumberForMethod(paymentMethod)}
+                        {getMerchantNumberForMethod(paymentMethod) || (
+                          <span className="text-amber-400/80 font-sans text-xs">
+                            Numéro en cours de configuration par le Super-Admin (Préférez le débit direct Push)
+                          </span>
+                        )}
                       </div>
                       <div className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
                         <Building className="w-3 h-3 text-[#FF5500]" />

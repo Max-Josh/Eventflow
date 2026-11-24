@@ -46,6 +46,8 @@ export const OrganizerDashboard: React.FC<OrganizerDashboardProps> = ({
   const waveCount = registrations.filter(r => r.paymentMethod === 'wave').length;
   const omCount = registrations.filter(r => r.paymentMethod === 'orange_money').length;
   const mtnCount = registrations.filter(r => r.paymentMethod === 'mtn_momo').length;
+  const moovCount = registrations.filter(r => r.paymentMethod === 'moov_money').length;
+  const cardCount = registrations.filter(r => r.paymentMethod === 'card').length;
   const freeCount = registrations.filter(r => r.paymentMethod === 'free').length;
 
   return (
@@ -150,7 +152,7 @@ export const OrganizerDashboard: React.FC<OrganizerDashboardProps> = ({
               <Smartphone className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-2 flex items-center gap-1 text-xs font-mono font-bold">
+          <div className="mt-2 flex flex-wrap items-center gap-1 text-xs font-mono font-bold">
             <span className="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400">
               Wave:{waveCount}
             </span>
@@ -160,6 +162,14 @@ export const OrganizerDashboard: React.FC<OrganizerDashboardProps> = ({
             <span className="px-1.5 py-0.5 rounded bg-yellow-500/10 text-yellow-400">
               MTN:{mtnCount}
             </span>
+            <span className="px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400">
+              Moov:{moovCount}
+            </span>
+            {cardCount > 0 && (
+              <span className="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400">
+                CB:{cardCount}
+              </span>
+            )}
           </div>
           <div className="mt-1.5 text-[11px] text-slate-400 font-sans">
             {freeCount} pass gratuits inclus

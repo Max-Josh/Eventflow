@@ -29,6 +29,8 @@ export const EventCatalog: React.FC<EventCatalogProps> = ({
     { id: 'conference', label: 'Conférences' },
     { id: 'formation', label: 'Formations' },
     { id: 'atelier', label: 'Ateliers' },
+    { id: 'seminaire', label: 'Séminaires' },
+    { id: 'concert', label: 'Concerts & Galas' },
     { id: 'afterwork', label: 'Networking' },
   ];
 

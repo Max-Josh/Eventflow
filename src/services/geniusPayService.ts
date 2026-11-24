@@ -43,12 +43,12 @@ const DEFAULT_CONFIG: GeniusPayConfig = {
     cards: true,
   },
   merchantNumbers: {
-    merchantName: 'EVENTFLOW CI SAS',
-    waveNumber: '+225 07 00 12 34 56',
-    orangeMoneyNumber: '+225 07 89 01 23 45',
-    mtnMoMoNumber: '+225 05 67 89 01 23',
-    moovMoneyNumber: '+225 01 23 45 67 89',
-    instructions: 'Mentionnez votre nom ou la référence de la commande lors du transfert.',
+    merchantName: 'EVENTFLOW CI',
+    waveNumber: '',
+    orangeMoneyNumber: '',
+    mtnMoMoNumber: '',
+    moovMoneyNumber: '',
+    instructions: 'Veuillez mentionner votre nom complet ou le numéro de commande en référence lors du transfert.',
   },
 };
 

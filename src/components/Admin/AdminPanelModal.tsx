@@ -21,12 +21,14 @@ interface AdminPanelModalProps {
   onClose: () => void;
   onOpenGeniusPayConfig: () => void;
   onOpenSupabaseConfig: () => void;
+  onPurgeRegistrations?: () => void;
 }
 
 export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
   onClose,
   onOpenGeniusPayConfig,
   onOpenSupabaseConfig,
+  onPurgeRegistrations,
 }) => {
   const [activeTab, setActiveTab] = useState<'geniuspay' | 'database' | 'security'>('geniuspay');
   const geniusConfig = getGeniusPayConfig();
@@ -256,6 +258,29 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                   <span className="text-slate-400">Conformité Réglementaire Monétique</span>
                   <span className="font-mono text-white font-bold">Norme Bancaire BCEAO / UEMOA</span>
                 </div>
+              </div>
+
+              {/* Purge / Reset Test Data */}
+              <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                  <h5 className="text-xs font-display font-bold text-rose-300">
+                    Nettoyage du Registre de Test
+                  </h5>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    Supprime toutes les inscriptions et billets de test pour démarrer avec une base vierge.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm('Confirmez-vous la purge définitive de toutes les inscriptions de test ?')) {
+                      onPurgeRegistrations?.();
+                    }
+                  }}
+                  className="px-3.5 py-2 rounded-xl text-xs font-display font-bold text-white bg-rose-600 hover:bg-rose-500 transition-colors cursor-pointer shrink-0 shadow-sm"
+                >
+                  Purger les tests enregistrés
+                </button>
               </div>
             </div>
           )}
